@@ -2,12 +2,12 @@ package memre.roomdemo
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import memre.roomdemo.data.Todo
-import memre.roomdemo.data.TodoRepository
 
 class MainActivity : FragmentActivity() {
 
@@ -22,7 +22,11 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.main_activity)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setActionBar(toolbar)
         setTitle(R.string.mainActivityTitle)
 
         val viewModelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
