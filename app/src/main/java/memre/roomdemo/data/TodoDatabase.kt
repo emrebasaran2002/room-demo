@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-@Database(entities = [Todo::class], version = 1, exportSchema = true)
+@Database(entities = [Todo::class], version = 2, exportSchema = true)
 abstract class TodoDatabase : RoomDatabase() {
 
     abstract fun getDao(): TodoDao
@@ -48,6 +48,5 @@ abstract class TodoDatabase : RoomDatabase() {
                 database
             }
         }
-
     }
 }
