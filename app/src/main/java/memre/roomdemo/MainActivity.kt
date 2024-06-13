@@ -1,8 +1,12 @@
 package memre.roomdemo
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toolbar
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,5 +46,50 @@ class MainActivity : FragmentActivity() {
         mViewModel.todos.observe(this) { todos: List<Todo> ->
             Log.v(TAG, "TODOS: $todos")
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+
+        // Get theme colors for enabled/disabled states.
+        val enabledColor = getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
+        val disabledColor = getThemeColor(com.google.android.material.R.attr.colorControlHighlight)
+
+        // Helper for resolving color from enabled/disabled state.
+        fun resolveColor(enabled: Boolean): Int = if (enabled) enabledColor else disabledColor
+
+        // Prepare undo and redo drawables.
+        val undoIcon = AppCompatResources.getDrawable(this, R.drawable.material_undo_24)
+            ?: throw Resources.NotFoundException("Could not get undo icon.")
+        val redoIcon = AppCompatResources.getDrawable(this, R.drawable.material_redo_24)
+            ?: throw Resources.NotFoundException("Could not get redo icon.")
+
+        // Prepare undo button.
+        val undoBtn = menu.add(R.string.undoMenuItemText)
+        undoBtn.setIcon(undoIcon)
+        undoBtn.setOnMenuItemClickListener {
+            mViewModel.undo()
+            true
+        }
+        mViewModel.canUndo.observe(this) { canUndo ->
+            undoBtn.isEnabled = canUndo
+            undoIcon.setTint(resolveColor(canUndo))
+        }
+        undoBtn.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+        // Prepare redo button.
+        val redoBtn = menu.add(R.string.redoMenuItemText)
+        redoBtn.setIcon(redoIcon)
+        redoBtn.setOnMenuItemClickListener {
+            mViewModel.redo()
+            true
+        }
+        mViewModel.canRedo.observe(this) { canRedo ->
+            redoBtn.isEnabled = canRedo
+            redoIcon.setTint(resolveColor(canRedo))
+        }
+        redoBtn.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+        return true
     }
 }

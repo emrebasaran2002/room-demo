@@ -3,4 +3,6 @@
     <string name="addTodoFABContentDesc">Add New To-Do</string>
     <string name="mainActivityTitle">My TODOs</string>
     <string name="todoEditButtonContentDesc">Edit To-Do</string>
+    <string name="undoMenuItemText">Undo</string>
+    <string name="redoMenuItemText">Redo</string>
 </resources>

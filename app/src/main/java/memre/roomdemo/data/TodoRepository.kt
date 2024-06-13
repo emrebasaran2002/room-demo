@@ -3,9 +3,17 @@ package memre.roomdemo.data
 import android.content.Context
 import androidx.lifecycle.LiveData
 
-class TodoRepository(context: Context) : ITodoRepository {
+class TodoRepository private constructor(private val dao: TodoDao) : ITodoRepository {
 
-    private val dao: TodoDao = TodoDatabase.getInstance(context).getDao()
+    // Constructor to instantiate a production instance of TodoRepository.
+    constructor(context: Context): this(TodoDatabase.getInstance(context).getDao())
+
+    companion object {
+        // Factory function to get a repository implementation that uses an
+        // in-memory fake database dependency.
+        fun getTestInstance(context: Context): ITodoRepository =
+            TodoRepository(TodoDatabase.getTestInstance(context).getDao())
+    }
 
     override fun addTodo(text: String): Long {
         return dao.addTodo(text)
