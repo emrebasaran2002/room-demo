@@ -5,4 +5,11 @@
     <string name="todoEditButtonContentDesc">Edit To-Do</string>
     <string name="undoMenuItemText">Undo</string>
     <string name="redoMenuItemText">Redo</string>
+    <string name="editTodoDialogTitle">Edit TODO</string>
+    <string name="addNewTodoDialogTitle">New TODO</string>
+    <string name="confirmBtnText">Confirm</string>
+    <string name="cancelBtnText">Cancel</string>
+    <string name="todoDialogEditTextHint">Enter TODO text.</string>
+    <string name="todoDialogEmptyTextToast">TODO text cannot be empty.</string>
+    <string name="editTodoDialogSameTextToast">TODO text same as before!</string>
 </resources>
