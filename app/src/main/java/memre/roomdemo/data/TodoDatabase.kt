@@ -1,6 +1,7 @@
 package memre.roomdemo.data
 
 import android.content.Context
+import androidx.annotation.GuardedBy
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,8 +15,8 @@ abstract class TodoDatabase : RoomDatabase() {
 
     companion object {
 
+        @GuardedBy("databaseLock")
         private var realInstance: TodoDatabase? = null
-        private var testInstance: TodoDatabase? = null
 
         private val databaseLock = ReentrantLock()
 
@@ -38,15 +39,12 @@ abstract class TodoDatabase : RoomDatabase() {
          * Obtain a fake instance of [TodoDatabase] for testing. This database will
          * reside in main memory and be destroyed when the testing is complete.
          */
-        fun getTestInstance(context: Context): TodoDatabase = databaseLock.withLock {
-            testInstance ?: run {
-                val database = Room.inMemoryDatabaseBuilder(context.applicationContext,
-                    TodoDatabase::class.java)
-                    .allowMainThreadQueries()
-                    .build()
-                testInstance = database
-                database
-            }
+        fun getTestInstance(context: Context): TodoDatabase {
+            // Always return a fresh new instance to ensure test independence.
+            return Room.inMemoryDatabaseBuilder(context.applicationContext,
+                TodoDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
         }
     }
 }
